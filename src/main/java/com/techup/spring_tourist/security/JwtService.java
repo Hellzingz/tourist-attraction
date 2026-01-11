@@ -12,13 +12,16 @@ import java.util.Date;
 @Service
 public class JwtService {
 
-  @Value("${jwt.secret}")
+  @Value("${jwt.secret:}")
   private String secretKey;
 
-  @Value("${jwt.expiration}")
+  @Value("${jwt.expiration:86400000}")
   private long expirationMs;
 
   private SecretKey getSigningKey() {
+    if (secretKey == null || secretKey.trim().isEmpty()) {
+      throw new IllegalStateException("JWT secret key is not configured. Please set JWT_SECRET environment variable.");
+    }
     return Keys.hmacShaKeyFor(secretKey.getBytes());
   }
 
