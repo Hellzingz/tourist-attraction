@@ -1,11 +1,13 @@
 package com.techup.spring_tourist.entity;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 import java.time.OffsetDateTime;
 
 @Entity
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "trips")
@@ -26,6 +28,9 @@ public class Trip {
     @Column(name = "tags", nullable = false, columnDefinition = "TEXT[]")
     private String[] tags = new String[0];
 
+    @Column(name = "location", nullable = false, columnDefinition = "TEXT")
+    private String location;
+
     @Column(name = "latitude")
     private Double latitude;
 
@@ -34,6 +39,7 @@ public class Trip {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "author_id", foreignKey = @ForeignKey(name = "fk_trip_author"))
+    @JsonIgnoreProperties({"passwordHash", "createdAt"})
     private User author;
 
     @Column(name = "created_at", nullable = false)
